@@ -37,7 +37,7 @@ Usage: $0 --genome GENOME [options]
 Download and setup reference genomes for RNA-seq pipeline
 
 Required arguments:
-  --genome GENOME         Reference genome (GRCh38, GRCm39, or custom)
+  --genome GENOME         Reference genome (GRCh38, GRCm39, Rnor_6.0, or custom)
 
 Optional arguments:
   --reference-dir DIR     Reference directory [default: references]
@@ -51,6 +51,7 @@ Optional arguments:
 Supported genomes:
   GRCh38                 Human genome (Homo sapiens)
   GRCm39                 Mouse genome (Mus musculus)
+  Rnor_6.0               Rat genome (Rattus norvegicus)
   custom                 User-provided FASTA and GTF files
 
 Examples:
@@ -59,6 +60,9 @@ Examples:
   
   # Download mouse genome with custom directory
   $0 --genome GRCm39 --reference-dir /data/references
+  
+  # Download rat genome
+  $0 --genome Rnor_6.0
   
   # Use custom genome files
   $0 --genome custom --custom-fasta genome.fa --custom-gtf genes.gtf
@@ -170,12 +174,17 @@ case "$GENOME" in
         FASTA_URL="http://ftp.ensembl.org/pub/release-108/fasta/mus_musculus/dna/Mus_musculus.GRCm39.dna.primary_assembly.fa.gz"
         GTF_URL="http://ftp.ensembl.org/pub/release-108/gtf/mus_musculus/Mus_musculus.GRCm39.108.gtf.gz"
         ;;
+    Rnor_6.0)
+        GENOME_NAME="Rnor_6.0"
+        FASTA_URL="http://ftp.ensembl.org/pub/release-108/fasta/rattus_norvegicus/dna/Rattus_norvegicus.Rnor_6.0.dna.toplevel.fa.gz"
+        GTF_URL="http://ftp.ensembl.org/pub/release-108/gtf/rattus_norvegicus/Rattus_norvegicus.Rnor_6.0.108.gtf.gz"
+        ;;
     custom)
         GENOME_NAME="custom"
         ;;
     *)
         error "Unsupported genome: $GENOME"
-        error "Supported genomes: GRCh38, GRCm39, custom"
+        error "Supported genomes: GRCh38, GRCm39, Rnor_6.0, custom"
         exit 1
         ;;
 esac

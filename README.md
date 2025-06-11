@@ -103,6 +103,12 @@ conda activate rnaseqpipe
 # For human samples
 ./setup_references.sh --genome GRCh38
 
+# For mouse samples
+./setup_references.sh --genome GRCm39
+
+# For rat samples
+./setup_references.sh --genome Rnor_6.0
+
 # This downloads ~3-4GB of reference files
 # Takes 15-30 minutes depending on internet speed
 ```
@@ -116,9 +122,20 @@ conda activate rnaseqpipe
 conda activate rnaseqpipe
 
 # 2. Run the pipeline (optimized for RNA-seq!)
+# For human samples:
 ./rna_preprocessing_local.sh \
     -d raw_data/ \
     --genome-config references/GRCh38/config.txt
+
+# For mouse samples:
+./rna_preprocessing_local.sh \
+    -d raw_data/ \
+    --genome-config references/GRCm39/config.txt
+
+# For rat samples:
+./rna_preprocessing_local.sh \
+    -d raw_data/ \
+    --genome-config references/Rnor_6.0/config.txt
 
 # That's it! The pipeline will:
 # - Automatically trim adapters and filter low-quality reads (fastp/trimmomatic)
