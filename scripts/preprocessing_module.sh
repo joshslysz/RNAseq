@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # RNA-seq Preprocessing Module
+# Author: Joshua Slysz, PhD - Dalhousie University
 # Handles adapter trimming, quality filtering, and rRNA removal for bulk RNA-seq
 
 set -euo pipefail

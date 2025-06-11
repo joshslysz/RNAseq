@@ -1,6 +1,7 @@
-#RNA-seq Pipeline
+# RNA-seq Pipeline
 
-Joshua Slysz
+**Author:** Joshua Slysz, PhD  
+**Institution:** Dalhousie University
 
 This pipeline takes your raw RNA-seq data and performs a complete RNA-seq analysis workflow:
 1. **Quality Control** - FastQC analysis of raw reads, adapter detection, quality assessment

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Alignment Module
+# Author: Joshua Slysz, PhD - Dalhousie University
 # Memory-optimized alignment with Bowtie2 and minimap2 support
 # Dynamically selects optimal aligner based on available resources
 

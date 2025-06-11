@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Resource Management Module
+# Author: Joshua Slysz, PhD - Dalhousie University
 # Memory and system resource monitoring for RNA-seq pipeline
 # Provides dynamic resource allocation and optimization
 

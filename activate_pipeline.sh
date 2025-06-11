@@ -1,4 +1,6 @@
 #!/bin/bash
+# RNA-seq Pipeline Environment Activation Script
+# Author: Joshua Slysz, PhD - Dalhousie University
 # Activate RNA-seq pipeline environment
 # Source this script before running the pipeline
 

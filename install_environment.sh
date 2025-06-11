@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # RNA-seq Pipeline Environment Installation Script
+# Author: Joshua Slysz, PhD - Dalhousie University
 # Automated conda environment setup for memory-optimized RNA-seq pipeline
 # Compatible with conda/mamba package managers
 

@@ -1,5 +1,6 @@
 #!/bin/bash
 # Test RNA-seq pipeline environment
+# Author: Joshua Slysz, PhD - Dalhousie University
 # Run this script to verify the environment works correctly
 
 set -euo pipefail

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Reference Genome Setup Script
+# Author: Joshua Slysz, PhD - Dalhousie University
 # Downloads and builds indices for RNA-seq pipeline
 # Supports GRCh38, GRCm39, and custom genomes
 

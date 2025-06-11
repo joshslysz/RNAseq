@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Quality Control Module
+# Author: Joshua Slysz, PhD - Dalhousie University
 # Comprehensive QC analysis with FastQC, MultiQC, and RSeQC
 # Memory-optimized for local systems
 

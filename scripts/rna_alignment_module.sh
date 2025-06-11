@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # RNA-seq Specific Alignment Module
+# Author: Joshua Slysz, PhD - Dalhousie University
 # Splice-aware alignment with HISAT2, STAR, and troubleshooting support
 
 set -euo pipefail

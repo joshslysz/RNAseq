@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Quantification Module
+# Author: Joshua Slysz, PhD - Dalhousie University
 # Memory-efficient gene expression quantification using featureCounts and Salmon
 # Optimized for local systems with limited resources
 

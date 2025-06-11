@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Automatic Configuration Selection
+# Author: Joshua Slysz, PhD - Dalhousie University
 # Detects system resources and selects optimal configuration
 # Part of memory-optimized RNA-seq pipeline
 

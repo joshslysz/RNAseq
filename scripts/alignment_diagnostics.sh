@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # RNA-seq Alignment Diagnostics Tool
+# Author: Joshua Slysz, PhD - Dalhousie University
 # Comprehensive analysis of low mapping rates and alignment issues
 
 set -euo pipefail

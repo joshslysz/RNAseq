@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Pipeline Testing and Validation Script
+# Author: Joshua Slysz, PhD - Dalhousie University
 # Comprehensive testing suite for memory-optimized RNA-seq pipeline
 # Tests environment, modules, and end-to-end functionality
 

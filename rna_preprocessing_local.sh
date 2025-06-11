@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Memory-Optimized Local RNA-seq Preprocessing Pipeline
+# Author: Joshua Slysz, PhD - Dalhousie University
 # Designed for systems with limited RAM (2-16GB)
 # Replaces SLURM-based cluster computing with smart local resource management
 
