@@ -1,0 +1,66 @@
+# RNA-seq Pipeline Conda Environment
+# Memory-optimized local RNA-seq preprocessing pipeline
+# Compatible with systems having 2-16GB RAM
+
+name: rnaseqpipe
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+
+dependencies:
+  # Core Python and shell
+  - python>=3.9
+  - bash
+  
+  # Quality control tools
+  - fastqc
+  - multiqc
+  
+  # Memory-efficient alignment tools
+  - bowtie2                # Primary aligner (3-4GB RAM)
+  - hisat2                 # Splice-aware RNA-seq aligner
+  - minimap2               # Ultra-low memory aligner (1-2GB RAM)
+  - samtools               # BAM file processing
+  - sambamba               # Faster BAM operations
+  
+  # Quantification tools
+  - subread                # Includes featureCounts
+  - salmon                 # Ultra-fast pseudo-alignment
+  - kallisto               # Alternative lightweight quantifier
+  
+  # Quality assessment
+  - rseqc                  # RNA-seq specific QC
+  - picard                 # Java-based tools for QC
+  
+  # System utilities
+  - parallel               # GNU parallel for job management
+  - pigz                   # Parallel gzip compression
+  - seqtk                  # FASTQ manipulation
+  - bedtools               # Genomic interval operations
+  - wget
+  - curl
+  
+  # Python scientific stack
+  - pandas                 # Data manipulation
+  - numpy                  # Numerical computing
+  - matplotlib             # Plotting
+  - seaborn                # Statistical visualization
+  - pysam                  # Python SAM/BAM interface
+  - psutil                 # System monitoring
+  
+  # R packages for downstream analysis (optional but recommended)
+  - r-base
+  - bioconductor-deseq2
+  - bioconductor-edger
+  - r-ggplot2
+  - r-dplyr
+  
+  # Development and debugging tools
+  - htop                   # Process monitoring
+  - tree                   # Directory structure display
+  
+  # Additional bioinformatics utilities
+  - bcftools               # Variant calling utilities
+  - htslib                 # HTSlib C library
+  - tabix                  # Generic indexer

@@ -1,0 +1,95 @@
+# RNA-seq Pipeline .gitignore
+
+# Large data files
+*.fastq
+*.fq
+*.fastq.gz
+*.fq.gz
+*.bam
+*.sam
+*.bai
+*.cram
+*.crai
+
+# Reference genome files (too large for git)
+references/*/genome.fa
+references/*/genome.fa.gz
+references/*/genome.fa.fai
+references/*/genes.gtf
+references/*/genes.gtf.gz
+references/*/genome.sizes
+references/*/hisat2_index/
+references/*/star_index/
+references/*/salmon_index/
+
+# Results and output directories
+results/
+output/
+temp/
+tmp/
+logs/
+*.log
+
+# Conda environments
+.conda/
+envs/
+**/miniconda*/
+**/anaconda*/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# R
+.Rhistory
+.Rapp.history
+.RData
+.Ruserdata
+*.Rproj
+.Rproj.user/
+
+# System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# Temporary files
+*.tmp
+*.temp
+
+# Large compressed archives
+*.tar
+*.tar.gz
+*.zip
+
+# Exclude specific data directories but keep structure
+data/*.fastq.gz
+data/*.fq.gz
+data/*.tar
+
+# Keep empty directories with .gitkeep
+!.gitkeep

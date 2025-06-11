@@ -1,0 +1,13 @@
+# Reference genome configuration
+# Generated on Tue Jun 10 15:30:54 ADT 2025
+
+GENOME_NAME=GRCh38
+GENOME_FASTA=/home/joshslysz/projects/RNAseqpipe/references/GRCh38/genome.fa
+GENOME_GTF=/home/joshslysz/projects/RNAseqpipe/references/GRCh38/genes.gtf
+HISAT2_INDEX=/home/joshslysz/projects/RNAseqpipe/references/GRCh38/hisat2_index/GRCh38
+GENOME_SIZES=/home/joshslysz/projects/RNAseqpipe/references/GRCh38/genome.sizes
+
+# Memory recommendations
+HISAT2_MEMORY_GB=4
+MINIMAP2_MEMORY_GB=2
+FEATURE_COUNTS_MEMORY_GB=2
