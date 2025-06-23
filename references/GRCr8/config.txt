@@ -1,0 +1,13 @@
+# Reference genome configuration
+# Generated on Mon Jun 23 13:56:50 ADT 2025
+
+GENOME_NAME=GRCr8
+GENOME_FASTA=/home/joshslysz/projects/RNAseqpipe/references/GRCr8/genome.fa
+GENOME_GTF=/home/joshslysz/projects/RNAseqpipe/references/GRCr8/genes.gtf
+HISAT2_INDEX=/home/joshslysz/projects/RNAseqpipe/references/GRCr8/hisat2_index/GRCr8
+GENOME_SIZES=/home/joshslysz/projects/RNAseqpipe/references/GRCr8/genome.sizes
+
+# Memory recommendations
+HISAT2_MEMORY_GB=4
+MINIMAP2_MEMORY_GB=2
+FEATURE_COUNTS_MEMORY_GB=2

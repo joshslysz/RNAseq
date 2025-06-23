@@ -22,37 +22,70 @@ warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
 
 # Get total system memory in GB
 get_total_memory() {
-    local mem_kb
-    mem_kb=$(grep MemTotal /proc/meminfo | awk '{print $2}')
-    echo $((mem_kb / 1024 / 1024))
+    if [[ "$(uname)" == "Darwin" ]]; then
+        local mem_bytes
+        mem_bytes=$(sysctl -n hw.memsize)
+        echo $((mem_bytes / 1024 / 1024 / 1024))
+    else
+        local mem_kb
+        mem_kb=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+        echo $((mem_kb / 1024 / 1024))
+    fi
 }
 
 # Get available memory in GB
 get_available_memory() {
-    local mem_kb
-    mem_kb=$(grep MemAvailable /proc/meminfo | awk '{print $2}')
-    echo $((mem_kb / 1024 / 1024))
+    if [[ "$(uname)" == "Darwin" ]]; then
+        # Parse vm_stat output for available memory
+        local page_size free_pages inactive_pages
+        page_size=$(vm_stat | grep "page size" | grep -o '[0-9]*')
+        free_pages=$(vm_stat | grep "Pages free" | grep -o '[0-9]*')
+        inactive_pages=$(vm_stat | grep "Pages inactive" | grep -o '[0-9]*')
+        echo $(( (free_pages + inactive_pages) * page_size / 1024 / 1024 / 1024 ))
+    else
+        local mem_kb
+        mem_kb=$(grep MemAvailable /proc/meminfo | awk '{print $2}')
+        echo $((mem_kb / 1024 / 1024))
+    fi
 }
 
 # Get memory usage in GB
 get_memory_usage() {
-    local total_kb used_kb
-    total_kb=$(grep MemTotal /proc/meminfo | awk '{print $2}')
-    used_kb=$(( total_kb - $(grep MemAvailable /proc/meminfo | awk '{print $2}') ))
-    echo $((used_kb / 1024 / 1024))
+    if [[ "$(uname)" == "Darwin" ]]; then
+        local total_gb available_gb
+        total_gb=$(get_total_memory)
+        available_gb=$(get_available_memory)
+        echo $((total_gb - available_gb))
+    else
+        local total_kb used_kb
+        total_kb=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+        used_kb=$(( total_kb - $(grep MemAvailable /proc/meminfo | awk '{print $2}') ))
+        echo $((used_kb / 1024 / 1024))
+    fi
 }
 
 # Get memory usage percentage
 get_memory_percentage() {
-    local total_kb used_kb
-    total_kb=$(grep MemTotal /proc/meminfo | awk '{print $2}')
-    used_kb=$(( total_kb - $(grep MemAvailable /proc/meminfo | awk '{print $2}') ))
-    echo $(( used_kb * 100 / total_kb ))
+    if [[ "$(uname)" == "Darwin" ]]; then
+        local total_gb used_gb
+        total_gb=$(get_total_memory)
+        used_gb=$(get_memory_usage)
+        echo $(( used_gb * 100 / total_gb ))
+    else
+        local total_kb used_kb
+        total_kb=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+        used_kb=$(( total_kb - $(grep MemAvailable /proc/meminfo | awk '{print $2}') ))
+        echo $(( used_kb * 100 / total_kb ))
+    fi
 }
 
 # Get CPU count
 get_cpu_count() {
-    nproc
+    if [[ "$(uname)" == "Darwin" ]]; then
+        sysctl -n hw.ncpu
+    else
+        nproc
+    fi
 }
 
 # Get disk usage for a directory in GB

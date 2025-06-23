@@ -216,7 +216,19 @@ download_file() {
 # Function to check memory requirements
 check_memory() {
     local available_mem_gb
-    available_mem_gb=$(free -g | awk 'NR==2{print $7}')
+    
+    # Cross-platform memory check
+    if command -v free &> /dev/null; then
+        # Linux
+        available_mem_gb=$(free -g | awk 'NR==2{print $7}')
+    elif [[ "$(uname)" == "Darwin" ]]; then
+        # macOS
+        available_mem_gb=$(( $(vm_stat | grep "Pages free" | awk '{print $3}' | tr -d '.') * 4096 / 1024 / 1024 / 1024 ))
+    else
+        # Fallback - assume sufficient memory
+        available_mem_gb=8
+        warning "Cannot determine available memory on this system"
+    fi
     
     if [[ $available_mem_gb -lt 4 ]]; then
         warning "Available memory: ${available_mem_gb}GB"
@@ -346,7 +358,7 @@ source activate_pipeline.sh
 ./rna_preprocessing_local.sh \\
     --data-dir raw_data/ \\
     --genome-config $GENOME_DIR/config.txt \\
-    --output-dir results_${GENOME_NAME,,}/
+    --output-dir results_$(echo "$GENOME_NAME" | tr '[:upper:]' '[:lower:]')/
 
 # Or specify paths directly
 ./rna_preprocessing_local.sh \\

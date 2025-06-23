@@ -326,7 +326,12 @@ initialize_pipeline() {
     
     # Create output directory structure
     mkdir -p "$OUTPUT_DIR"/{aligned,counts,qc_reports,logs,temp}
-    OUTPUT_DIR=$(realpath "$OUTPUT_DIR")
+    # Convert to absolute path (cross-platform compatible)
+    if command -v realpath >/dev/null 2>&1; then
+        OUTPUT_DIR=$(realpath "$OUTPUT_DIR")
+    else
+        OUTPUT_DIR=$(cd "$OUTPUT_DIR" && pwd)
+    fi
     
     # Setup logging
     LOG_FILE="$OUTPUT_DIR/logs/pipeline_$(date '+%Y%m%d_%H%M%S').log"

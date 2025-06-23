@@ -680,9 +680,14 @@ hisat2 -x genome_index -1 reads_1.fq.gz -2 reads_2.fq.gz -S output.sam
 </html>
 EOF
     
-    # Replace placeholders with actual values
-    sed -i "s/SAMPLE_ID/$SAMPLE_ID/g" "$report_file"
-    sed -i "s/DATE_PLACEHOLDER/$(date)/g" "$report_file"
+    # Replace placeholders with actual values (cross-platform sed -i)
+    if [[ "$(uname)" == "Darwin" ]]; then
+        sed -i '' "s/SAMPLE_ID/$SAMPLE_ID/g" "$report_file"
+        sed -i '' "s/DATE_PLACEHOLDER/$(date)/g" "$report_file"
+    else
+        sed -i "s/SAMPLE_ID/$SAMPLE_ID/g" "$report_file"
+        sed -i "s/DATE_PLACEHOLDER/$(date)/g" "$report_file"
+    fi
     
     success "Diagnostic report saved to: $report_file"
     info "Open in browser: file://$report_file"

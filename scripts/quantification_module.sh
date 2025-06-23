@@ -450,8 +450,12 @@ create_simplified_count_file() {
     # Extract gene_id (column 1) and count (last column)
     awk 'NR>1 {print $1 "\t" $NF}' "$OUTPUT_FILE" > "$simple_file"
     
-    # Add header
-    sed -i '1i gene_id\tcount' "$simple_file"
+    # Add header (cross-platform sed -i)
+    if [[ "$(uname)" == "Darwin" ]]; then
+        sed -i '' '1i gene_id\tcount' "$simple_file"
+    else
+        sed -i '1i gene_id\tcount' "$simple_file"
+    fi
     
     log "Simplified count file created: $simple_file"
 }
@@ -470,8 +474,12 @@ convert_salmon_output() {
     # Extract transcript_id and NumReads (estimated counts)
     awk 'NR>1 {print $1 "\t" $5}' "$quant_file" > "$OUTPUT_FILE"
     
-    # Add header
-    sed -i '1i transcript_id\tcount' "$OUTPUT_FILE"
+    # Add header (cross-platform sed -i)
+    if [[ "$(uname)" == "Darwin" ]]; then
+        sed -i '' '1i transcript_id\tcount' "$OUTPUT_FILE"
+    else
+        sed -i '1i transcript_id\tcount' "$OUTPUT_FILE"
+    fi
     
     log "Salmon output converted to standard format: $OUTPUT_FILE"
 }
