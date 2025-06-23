@@ -37,7 +37,7 @@ Usage: $0 --genome GENOME [options]
 Download and setup reference genomes for RNA-seq pipeline
 
 Required arguments:
-  --genome GENOME         Reference genome (GRCh38, GRCm39, Rnor_6.0, or custom)
+  --genome GENOME         Reference genome (GRCh38, GRCm39, GRCr8, or custom)
 
 Optional arguments:
   --reference-dir DIR     Reference directory [default: references]
@@ -51,7 +51,7 @@ Optional arguments:
 Supported genomes:
   GRCh38                 Human genome (Homo sapiens)
   GRCm39                 Mouse genome (Mus musculus)
-  Rnor_6.0               Rat genome (Rattus norvegicus)
+  GRCr8                  Rat genome (Rattus norvegicus)
   custom                 User-provided FASTA and GTF files
 
 Examples:
@@ -62,7 +62,7 @@ Examples:
   $0 --genome GRCm39 --reference-dir /data/references
   
   # Download rat genome
-  $0 --genome Rnor_6.0
+  $0 --genome GRCr8
   
   # Use custom genome files
   $0 --genome custom --custom-fasta genome.fa --custom-gtf genes.gtf
@@ -166,25 +166,25 @@ log "Using reference directory: $REFERENCE_DIR"
 case "$GENOME" in
     GRCh38)
         GENOME_NAME="GRCh38"
-        FASTA_URL="http://ftp.ensembl.org/pub/release-108/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz"
-        GTF_URL="http://ftp.ensembl.org/pub/release-108/gtf/homo_sapiens/Homo_sapiens.GRCh38.108.gtf.gz"
+        FASTA_URL="http://ftp.ensembl.org/pub/release-115/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz"
+        GTF_URL="http://ftp.ensembl.org/pub/release-115/gtf/homo_sapiens/Homo_sapiens.GRCh38.115.gtf.gz"
         ;;
     GRCm39)
         GENOME_NAME="GRCm39"
-        FASTA_URL="http://ftp.ensembl.org/pub/release-108/fasta/mus_musculus/dna/Mus_musculus.GRCm39.dna.primary_assembly.fa.gz"
-        GTF_URL="http://ftp.ensembl.org/pub/release-108/gtf/mus_musculus/Mus_musculus.GRCm39.108.gtf.gz"
+        FASTA_URL="http://ftp.ensembl.org/pub/release-115/fasta/mus_musculus/dna/Mus_musculus.GRCm39.dna.primary_assembly.fa.gz"
+        GTF_URL="http://ftp.ensembl.org/pub/release-115/gtf/mus_musculus/Mus_musculus.GRCm39.115.gtf.gz"
         ;;
-    Rnor_6.0)
-        GENOME_NAME="Rnor_6.0"
-        FASTA_URL="http://ftp.ensembl.org/pub/release-108/fasta/rattus_norvegicus/dna/Rattus_norvegicus.Rnor_6.0.dna.toplevel.fa.gz"
-        GTF_URL="http://ftp.ensembl.org/pub/release-108/gtf/rattus_norvegicus/Rattus_norvegicus.Rnor_6.0.108.gtf.gz"
+    GRCr8)
+        GENOME_NAME="GRCr8"
+        FASTA_URL="http://ftp.ensembl.org/pub/release-114/fasta/rattus_norvegicus/dna/Rattus_norvegicus.GRCr8.dna.toplevel.fa.gz"
+        GTF_URL="http://ftp.ensembl.org/pub/release-114/gtf/rattus_norvegicus/Rattus_norvegicus.GRCr8.114.gtf.gz"
         ;;
     custom)
         GENOME_NAME="custom"
         ;;
     *)
         error "Unsupported genome: $GENOME"
-        error "Supported genomes: GRCh38, GRCm39, Rnor_6.0, custom"
+        error "Supported genomes: GRCh38, GRCm39, GRCr8, custom"
         exit 1
         ;;
 esac
