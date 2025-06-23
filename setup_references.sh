@@ -17,7 +17,7 @@ NC='\033[0m'
 # Default values
 GENOME=""
 BUILD_INDICES=true
-THREADS=$(nproc)
+THREADS=$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo "1")
 REFERENCE_DIR="references"
 FORCE_DOWNLOAD=false
 CUSTOM_FASTA=""
@@ -41,7 +41,7 @@ Required arguments:
 
 Optional arguments:
   --reference-dir DIR     Reference directory [default: references]
-  --threads N             Number of threads for index building [default: $(nproc)]
+  --threads N             Number of threads for index building [default: auto-detect]
   --no-build              Download only, don't build indices
   --force                 Force re-download even if files exist
   --custom-fasta FILE     Custom genome FASTA file (for --genome custom)
