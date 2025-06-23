@@ -159,7 +159,7 @@ success "All required tools found!"
 
 # Create reference directory
 mkdir -p "$REFERENCE_DIR"
-REFERENCE_DIR=$(realpath "$REFERENCE_DIR")
+REFERENCE_DIR=$(cd "$REFERENCE_DIR" && pwd)
 log "Using reference directory: $REFERENCE_DIR"
 
 # Genome-specific configurations
