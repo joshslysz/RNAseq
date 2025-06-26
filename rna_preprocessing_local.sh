@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Memory-Optimized Local RNA-seq Preprocessing Pipeline
 # Author: Joshua Slysz, PhD - Dalhousie University
