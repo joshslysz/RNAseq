@@ -217,13 +217,17 @@ download_file() {
 check_memory() {
     local available_mem_gb
     
-    # Cross-platform memory check
+    # Cross-platform memory check using proper methods
     if command -v free &> /dev/null; then
         # Linux
         available_mem_gb=$(free -g | awk 'NR==2{print $7}')
     elif [[ "$(uname)" == "Darwin" ]]; then
-        # macOS
-        available_mem_gb=$(( $(vm_stat | grep "Pages free" | awk '{print $3}' | tr -d '.') * 4096 / 1024 / 1024 / 1024 ))
+        # macOS - proper memory detection
+        local page_size free_pages inactive_pages
+        page_size=$(vm_stat | grep "page size" | grep -o '[0-9]*')
+        free_pages=$(vm_stat | grep "Pages free" | grep -o '[0-9]*')
+        inactive_pages=$(vm_stat | grep "Pages inactive" | grep -o '[0-9]*')
+        available_mem_gb=$(( (free_pages + inactive_pages) * page_size / 1024 / 1024 / 1024 ))
     else
         # Fallback - assume sufficient memory
         available_mem_gb=8

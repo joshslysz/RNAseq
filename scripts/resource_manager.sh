@@ -47,26 +47,69 @@ get_total_memory() {
 # Get available memory in GB
 get_available_memory() {
     if [[ "$(uname)" == "Darwin" ]]; then
-        # Parse vm_stat output for available memory
-        local page_size free_pages inactive_pages
+        # Try multiple methods to get available memory on macOS
+        local available_gb=0
         
-        # Get page size - handle different vm_stat output formats
-        page_size=$(vm_stat | head -1 | grep -o '[0-9]*' | head -1)
-        if [[ -z "$page_size" ]]; then
-            # Fallback: standard macOS page size is 4096 bytes
-            page_size=4096
+        # Method 1: Try using memory_pressure command (most reliable on newer macOS)
+        if command -v memory_pressure >/dev/null 2>&1; then
+            local mem_info
+            mem_info=$(memory_pressure 2>/dev/null | grep "System-wide memory free percentage:")
+            if [[ -n "$mem_info" ]]; then
+                local free_percent
+                free_percent=$(echo "$mem_info" | grep -o '[0-9]*' | head -1)
+                if [[ -n "$free_percent" && "$free_percent" -gt 0 ]]; then
+                    local total_mem=$(get_total_memory)
+                    available_gb=$((total_mem * free_percent / 100))
+                fi
+            fi
         fi
         
-        # Get free and inactive pages
-        free_pages=$(vm_stat | grep "Pages free" | grep -o '[0-9]*' | head -1)
-        inactive_pages=$(vm_stat | grep "Pages inactive" | grep -o '[0-9]*' | head -1)
+        # Method 2: Parse vm_stat output (fallback method)
+        if [[ $available_gb -eq 0 ]]; then
+            local page_size free_pages inactive_pages
+            
+            # Get page size from vm_stat header
+            page_size=$(vm_stat | head -1 | sed 's/.*page size of \([0-9]*\) bytes.*/\1/')
+            if [[ -z "$page_size" || ! "$page_size" =~ ^[0-9]+$ ]]; then
+                page_size=4096  # Standard macOS page size
+            fi
+            
+            # Get free and inactive pages with improved parsing
+            free_pages=$(vm_stat | grep "Pages free:" | awk '{print $3}' | sed 's/\.//')
+            inactive_pages=$(vm_stat | grep "Pages inactive:" | awk '{print $3}' | sed 's/\.//')
+            
+            # Handle case where values might be empty
+            free_pages=${free_pages:-0}
+            inactive_pages=${inactive_pages:-0}
+            
+            # Ensure we have valid numbers
+            if [[ "$free_pages" =~ ^[0-9]+$ && "$inactive_pages" =~ ^[0-9]+$ ]]; then
+                # Calculate available memory in bytes first, then convert to GB
+                local available_bytes=$(( (free_pages + inactive_pages) * page_size ))
+                available_gb=$((available_bytes / 1024 / 1024 / 1024))
+            fi
+        fi
         
-        # Handle case where values might be empty
-        free_pages=${free_pages:-0}
-        inactive_pages=${inactive_pages:-0}
+        # Method 3: Use system_profiler as final fallback
+        if [[ $available_gb -eq 0 ]]; then
+            local total_mem
+            total_mem=$(system_profiler SPHardwareDataType 2>/dev/null | grep "Memory:" | awk '{print $2}' | sed 's/GB//')
+            if [[ -n "$total_mem" && "$total_mem" =~ ^[0-9]+$ ]]; then
+                # Conservative estimate: assume 30% of total memory is available
+                available_gb=$((total_mem * 30 / 100))
+            else
+                # Ultimate fallback based on total memory
+                total_mem=$(get_total_memory)
+                available_gb=$((total_mem * 30 / 100))
+            fi
+        fi
         
-        # Calculate available memory in GB
-        echo $(( (free_pages + inactive_pages) * page_size / 1024 / 1024 / 1024 ))
+        # Ensure we return at least 1GB for systems with some memory
+        if [[ $available_gb -lt 1 ]]; then
+            available_gb=1
+        fi
+        
+        echo $available_gb
     else
         local mem_kb
         mem_kb=$(grep MemAvailable /proc/meminfo | awk '{print $2}')
