@@ -24,8 +24,19 @@ warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
 get_total_memory() {
     if [[ "$(uname)" == "Darwin" ]]; then
         local mem_bytes
-        mem_bytes=$(sysctl -n hw.memsize)
-        echo $((mem_bytes / 1024 / 1024 / 1024))
+        mem_bytes=$(sysctl -n hw.memsize 2>/dev/null)
+        if [[ -z "$mem_bytes" || "$mem_bytes" -eq 0 ]]; then
+            # Alternative method for older macOS versions
+            mem_bytes=$(system_profiler SPHardwareDataType | grep "Memory:" | awk '{print $2}' | sed 's/GB//' 2>/dev/null)
+            if [[ -n "$mem_bytes" ]]; then
+                echo "$mem_bytes"
+            else
+                # Final fallback - estimate from vm_stat
+                echo "8"  # Conservative estimate
+            fi
+        else
+            echo $((mem_bytes / 1024 / 1024 / 1024))
+        fi
     else
         local mem_kb
         mem_kb=$(grep MemTotal /proc/meminfo | awk '{print $2}')
@@ -38,9 +49,23 @@ get_available_memory() {
     if [[ "$(uname)" == "Darwin" ]]; then
         # Parse vm_stat output for available memory
         local page_size free_pages inactive_pages
-        page_size=$(vm_stat | grep "page size" | grep -o '[0-9]*')
-        free_pages=$(vm_stat | grep "Pages free" | grep -o '[0-9]*')
-        inactive_pages=$(vm_stat | grep "Pages inactive" | grep -o '[0-9]*')
+        
+        # Get page size - handle different vm_stat output formats
+        page_size=$(vm_stat | head -1 | grep -o '[0-9]*' | head -1)
+        if [[ -z "$page_size" ]]; then
+            # Fallback: standard macOS page size is 4096 bytes
+            page_size=4096
+        fi
+        
+        # Get free and inactive pages
+        free_pages=$(vm_stat | grep "Pages free" | grep -o '[0-9]*' | head -1)
+        inactive_pages=$(vm_stat | grep "Pages inactive" | grep -o '[0-9]*' | head -1)
+        
+        # Handle case where values might be empty
+        free_pages=${free_pages:-0}
+        inactive_pages=${inactive_pages:-0}
+        
+        # Calculate available memory in GB
         echo $(( (free_pages + inactive_pages) * page_size / 1024 / 1024 / 1024 ))
     else
         local mem_kb
